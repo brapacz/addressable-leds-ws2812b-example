@@ -104,32 +104,25 @@ int main(void) {
 	uint8_t brightness = 16;
 	size_t delay = 250;
 
+	WS2812B_clear_all_now();
+
 	while (1) {
 		HAL_GPIO_TogglePin(LED_USER_GPIO_Port, LED_USER_Pin);
-//		brightness = (brightness+32)%256;
-//		WS2812B_clear_all();
-		WS2812B_send();
 		WS2812B_set(0, 0, 0, brightness);
-//		WS2812B_send();
 		WS2812B_set(1, 0, brightness, 0);
-//		WS2812B_send();
 		WS2812B_set(2, brightness, 0, 0);
 		WS2812B_send();
 		HAL_Delay(delay);
 
-//		WS2812B_clear_all();
-//		WS2812B_send();
 		WS2812B_set(1, 0, brightness, brightness);
-		WS2812B_clear(0);
-		WS2812B_send();
+		WS2812B_clear_now(0);
 		HAL_Delay(delay);
 
 		WS2812B_set(2, brightness, 0, brightness);
 		WS2812B_send();
 		HAL_Delay(delay);
 
-		WS2812B_clear_all();
-		WS2812B_send();
+		WS2812B_clear_all_now();
 		HAL_Delay(delay);
 		/* USER CODE END WHILE */
 

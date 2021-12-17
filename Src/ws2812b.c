@@ -40,6 +40,16 @@ void WS2812B_clear_all() {
 		WS2812B_clear(i);
 }
 
+void WS2812B_clear_now(size_t offset) {
+	WS2812B_clear(offset);
+	WS2812B_send();
+}
+
+void WS2812B_clear_all_now() {
+	WS2812B_clear_all();
+	WS2812B_send();
+}
+
 void WS2812B_set_all(uint8_t red, uint8_t green, uint8_t blue) {
 	for (size_t i = 0; i < WS2812B_led_count; i++)
 		WS2812B_set(i, red, green, blue);
