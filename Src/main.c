@@ -58,16 +58,12 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim) {
-	HAL_TIM_PWM_Stop_DMA(&htim1, TIM_CHANNEL_1);
-}
 /* USER CODE END 0 */
 
 /**
  * @brief  The application entry point.
  * @retval int
  */
-#define brightness 1
 int main(void) {
 	/* USER CODE BEGIN 1 */
 
@@ -94,29 +90,38 @@ int main(void) {
 	MX_DMA_Init();
 	MX_TIM1_Init();
 	/* USER CODE BEGIN 2 */
+	Neopixel_InitTypeDef Neopixel_InitStruct;
+	Neopixel_InitStruct.timer_channel = TIM_CHANNEL_1;
+	Neopixel_InitStruct.timer = &htim1;
+	Neopixel_InitStruct.led_count = 3;
+	Neopixel_init(&Neopixel_InitStruct);
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 
-	uint8_t offset = 0;
+	uint8_t brightness = 128;
 
 	while (1) {
 //		brightness = (brightness+32)%256;
-		HAL_Delay(200);
-		neopixel_send(0, 0, brightness, offset++ % 2);
-		HAL_Delay(200);
-		neopixel_send(0, brightness, brightness, offset++ % 2);
-		HAL_Delay(200);
-		neopixel_send(0, brightness, 0, offset++ % 2);
-		HAL_Delay(200);
-		neopixel_send(brightness, brightness, 0, offset++ % 2);
-		HAL_Delay(200);
-		neopixel_send(brightness, 0, 0, offset++ % 2);
-		HAL_Delay(200);
-		neopixel_send(brightness, 0, brightness, offset++ % 2);
+//		Neopixel_clear_all();
+		Neopixel_send();
+		Neopixel_set(0, 0, 0, brightness);
+//		Neopixel_send();
+		Neopixel_set(1, 0, brightness, 0);
+//		Neopixel_send();
+		Neopixel_set(2, brightness, 0, 0);
+		Neopixel_send();
+		HAL_Delay(1000);
+
+//		Neopixel_clear_all();
+//		Neopixel_send();
+		Neopixel_set(1, 0, brightness, brightness);
+		Neopixel_send();
+//		brightness += ;
+//		while(1);
+		HAL_Delay(1000);
 	}
-//  HAL_Delay(1000);
 	while (1) {
 		HAL_GPIO_TogglePin(LED_USER_GPIO_Port, LED_USER_Pin);
 //	HAL_GPIO_TogglePin(RGB_OUT_GPIO_Port, RGB_OUT_Pin);

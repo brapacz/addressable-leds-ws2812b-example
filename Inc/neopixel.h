@@ -1,20 +1,29 @@
-#define PIXELS_COUNT 2
+#ifndef __neopixel_H
+#define __neopixel_H
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-uint16_t pwmData[2 + PIXELS_COUNT][24] = { 0 };
+#include "tim.h"
 
-void neopixel_send(uint8_t red, uint8_t green, uint8_t blue, uint8_t offset) {
-	// offset should be >= 0 and < PIXELS_COUNT
-	uint32_t colour = ((blue) << 16) | ((green) << 8) | (red);
-	uint16_t HI = (htim1.Init.Period + 1) * 2 / 3;
-	uint16_t LO = (htim1.Init.Period + 1) * 1 / 3;
-	for (int i = 0; i < 24; i++)
-		if (colour & (1 << (23 - i)))
-//		if(i % 2 == 0)
-			pwmData[offset][i] = HI;
-		else
-			pwmData[offset][i] = LO;
-//			pwmData[i] = ;
-	HAL_TIM_PWM_Start_DMA(&htim1, TIM_CHANNEL_1, (uint32_t*) pwmData,
-//		sizeof(pwmData) / sizeof(pwmData[0])
-			24 * PIXELS_COUNT + 40);
+#ifdef __cplusplus
 }
+#endif
+#endif /*__ __neopixel_H */
+
+#define Neopixel_ret_periods 50
+
+typedef struct {
+	size_t led_count;
+	TIM_HandleTypeDef *timer;
+	uint32_t timer_channel;
+} Neopixel_InitTypeDef;
+
+void Neopixel_init(Neopixel_InitTypeDef* init);
+void Neopixel_deinit();
+void Neopixel_set(size_t offset, uint8_t red, uint8_t green, uint8_t blue);
+void Neopixel_set_all(uint8_t red, uint8_t green, uint8_t blue);
+void Neopixel_clear(size_t offset);
+void Neopixel_clear_all();
+void Neopixel_send();
+void Neopixel_on_send_completed();
