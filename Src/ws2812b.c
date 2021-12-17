@@ -1,4 +1,4 @@
-#include "neopixel.h"
+#include "ws2812b.h"
 #include <stdlib.h>
 
 size_t Neopixel_led_count = 0;
@@ -58,18 +58,23 @@ void Neopixel_set(size_t offset, uint8_t red, uint8_t green, uint8_t blue) {
 			Neopixel_PwmData[idx] = Neopixel_LO;
 	}
 }
+
 void Neopixel_send() {
-	while(Neopixel_DMA_Started);
+	while (1 == Neopixel_DMA_Started)
+		;
 	Neopixel_DMA_Started = 1;
 	HAL_TIM_PWM_Start_DMA(&htim1, TIM_CHANNEL_1, (uint32_t*) Neopixel_PwmData,
 			Neopixel_PwmData_size);
 }
 
 void Neopixel_on_send_completed() {
-	HAL_TIM_PWM_Stop_DMA(Neopixel_timer, Neopixel_timer_channel);
-	Neopixel_DMA_Started = 0;
+	if (1 == Neopixel_DMA_Started) {
+		HAL_TIM_PWM_Stop_DMA(Neopixel_timer, Neopixel_timer_channel);
+		Neopixel_DMA_Started = 0;
+	}
 }
 
 void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim) {
-	Neopixel_on_send_completed();
+	if (htim == Neopixel_timer)
+		Neopixel_on_send_completed();
 }

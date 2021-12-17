@@ -26,7 +26,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "neopixel.h"
+#include "ws2812b.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -100,7 +101,7 @@ int main(void) {
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 
-	uint8_t brightness = 128;
+	uint8_t brightness = 1;
 
 	while (1) {
 //		brightness = (brightness+32)%256;
@@ -118,7 +119,7 @@ int main(void) {
 //		Neopixel_send();
 		Neopixel_set(1, 0, brightness, brightness);
 		Neopixel_send();
-//		brightness += ;
+		brightness += 64;
 //		while(1);
 		HAL_Delay(1000);
 	}
