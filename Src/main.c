@@ -67,6 +67,7 @@ void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim) {
  * @brief  The application entry point.
  * @retval int
  */
+#define brightness 1
 int main(void) {
 	/* USER CODE BEGIN 1 */
 
@@ -98,13 +99,22 @@ int main(void) {
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 
-	while(1) {
-	HAL_Delay(100);
-	neopixel_send(0, 0, 8);
-	HAL_Delay(100);
-	neopixel_send(0, 8, 0);
-	HAL_Delay(100);
-	neopixel_send(8, 0, 0);
+	uint8_t offset = 0;
+
+	while (1) {
+//		brightness = (brightness+32)%256;
+		HAL_Delay(200);
+		neopixel_send(0, 0, brightness, offset++ % 2);
+		HAL_Delay(200);
+		neopixel_send(0, brightness, brightness, offset++ % 2);
+		HAL_Delay(200);
+		neopixel_send(0, brightness, 0, offset++ % 2);
+		HAL_Delay(200);
+		neopixel_send(brightness, brightness, 0, offset++ % 2);
+		HAL_Delay(200);
+		neopixel_send(brightness, 0, 0, offset++ % 2);
+		HAL_Delay(200);
+		neopixel_send(brightness, 0, brightness, offset++ % 2);
 	}
 //  HAL_Delay(1000);
 	while (1) {
