@@ -91,35 +91,36 @@ int main(void) {
 	MX_DMA_Init();
 	MX_TIM1_Init();
 	/* USER CODE BEGIN 2 */
-	Neopixel_InitTypeDef Neopixel_InitStruct;
-	Neopixel_InitStruct.timer_channel = TIM_CHANNEL_1;
-	Neopixel_InitStruct.timer = &htim1;
-	Neopixel_InitStruct.led_count = 3;
-	Neopixel_init(&Neopixel_InitStruct);
+	WS2812B_InitTypeDef WS2812B_InitStruct;
+	WS2812B_InitStruct.timer_channel = TIM_CHANNEL_1;
+	WS2812B_InitStruct.timer = &htim1;
+	WS2812B_InitStruct.led_count = 3;
+	WS2812B_init(&WS2812B_InitStruct);
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 
-	uint8_t brightness = 1;
+	uint8_t brightness = 16;
 
 	while (1) {
 //		brightness = (brightness+32)%256;
-//		Neopixel_clear_all();
-		Neopixel_send();
-		Neopixel_set(0, 0, 0, brightness);
-//		Neopixel_send();
-		Neopixel_set(1, 0, brightness, 0);
-//		Neopixel_send();
-		Neopixel_set(2, brightness, 0, 0);
-		Neopixel_send();
+//		WS2812B_clear_all();
+		WS2812B_send();
+		WS2812B_set(0, 0, 0, brightness);
+//		WS2812B_send();
+		WS2812B_set(1, 0, brightness, 0);
+//		WS2812B_send();
+		WS2812B_set(2, brightness, 0, 0);
+		WS2812B_send();
 		HAL_Delay(1000);
 
-//		Neopixel_clear_all();
-//		Neopixel_send();
-		Neopixel_set(1, 0, brightness, brightness);
-		Neopixel_send();
-		brightness += 64;
+//		WS2812B_clear_all();
+//		WS2812B_send();
+		WS2812B_set(1, 0, brightness, brightness);
+		WS2812B_clear(0);
+		WS2812B_send();
+//		brightness += 64;
 //		while(1);
 		HAL_Delay(1000);
 	}
